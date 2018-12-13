@@ -1,2 +1,8 @@
-# Object-C-learning
-learning Object-C by 《iOS编程 第4版》
+# Object-C-learning by 《iOS编程 第4版》
+
+## 环境
+Xcode 10.1
+Build Time 2018-12-13
+
+## 些许好处
+由于OC的一些语法和框架的变动，《iOS编程 第4版》书内的一些项目无法在现有的环境中运行。作者抱着学习的心态，重新实现了书内的实例。
