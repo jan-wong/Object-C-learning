@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BNRHypnosisViewController: UIViewController
+@interface BNRHypnosisViewController: UIViewController<UITextFieldDelegate>
 
 @end
 
