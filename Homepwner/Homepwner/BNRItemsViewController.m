@@ -9,10 +9,11 @@
 #import "BNRItemsViewController.h"
 #import "BNRItemStore.h"
 #import "BNRItem.h"
+#import "BNRDetailViewController.h"
 
 @interface BNRItemsViewController ()
 
-@property (nonatomic, strong) IBOutlet UIView *headerView;
+//@property (nonatomic, strong) IBOutlet UIView *headerView;
 
 @end
 
@@ -23,22 +24,31 @@
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     
-    UIView *header = self.headerView;
-    [self.tableView setTableHeaderView:header];
+//    UIView *header = self.headerView;
+//    [self.tableView setTableHeaderView:header];
 }
 
 -(instancetype) init {
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
-        for (int i = 0; i < 5; i++) {
-            [[BNRItemStore sharedStore] createItem];
-        }
+        UINavigationItem *navItem = self.navigationItem;
+        navItem.title = @"Homepwner";
+        
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewItem:)];
+        navItem.rightBarButtonItem = bbi;
+        navItem.leftBarButtonItem = self.editButtonItem;
     }
     return self;
 }
 
 -(instancetype) initWithStyle:(UITableViewStyle)style {
     return [self init];
+}
+
+// 重载tableView数据
+-(void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    [self.tableView reloadData];
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -69,6 +79,15 @@
     [[BNRItemStore sharedStore] moveItemAtIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
 }
 
+// 点击tableview的row
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    BNRDetailViewController *detailViewController = [[BNRDetailViewController alloc] init];
+    NSArray *items = [[BNRItemStore sharedStore] allItems];
+    BNRItem *selectedItem = items[indexPath.row];
+    detailViewController.item = selectedItem;
+    [self.navigationController pushViewController:detailViewController animated:YES];
+}
+
 -(IBAction)addNewItem:(id)sender {
     BNRItem *newItem = [[BNRItemStore sharedStore] createItem];
     NSInteger lastRow = [[[BNRItemStore sharedStore] allItems] indexOfObject:newItem];
@@ -77,23 +96,23 @@
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
 }
 
--(IBAction)toggleEditMode:(id)sender {
-    if (self.isEditing) {
-        [sender setTitle:@"Edit" forState:UIControlStateNormal];
-        [self setEditing:NO animated:YES];
-    } else {
-        [sender setTitle:@"Done" forState:UIControlStateNormal];
-        [self setEditing:YES animated:YES];
-    }
-}
-
-//header
--(UIView *) headerView {
-    if (!_headerView) {
-        [[NSBundle mainBundle] loadNibNamed:@"HeaderView" owner:self options:nil];
-    }
-    NSLog(@"%@", [NSBundle mainBundle]);
-    return _headerView;
-}
+//-(IBAction)toggleEditMode:(id)sender {
+//    if (self.isEditing) {
+//        [sender setTitle:@"Edit" forState:UIControlStateNormal];
+//        [self setEditing:NO animated:YES];
+//    } else {
+//        [sender setTitle:@"Done" forState:UIControlStateNormal];
+//        [self setEditing:YES animated:YES];
+//    }
+//}
+//
+////header
+//-(UIView *) headerView {
+//    if (!_headerView) {
+//        [[NSBundle mainBundle] loadNibNamed:@"HeaderView" owner:self options:nil];
+//    }
+//    NSLog(@"%@", [NSBundle mainBundle]);
+//    return _headerView;
+//}
 
 @end
