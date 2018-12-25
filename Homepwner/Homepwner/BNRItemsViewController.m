@@ -87,6 +87,7 @@
     }
 }
 
+//header
 -(UIView *) headerView {
     if (!_headerView) {
         [[NSBundle mainBundle] loadNibNamed:@"HeaderView" owner:self options:nil];
